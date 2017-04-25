@@ -36,7 +36,7 @@ namespace Tools {
 
 	bool Uart::OpenAvailableComm() {
 		DBG_I("[Uart] OpenAvailableComm");
-		for(register int i = 0; i < COMM_USED; i++) {
+		for (register int i = 0; i < COMM_USED; i++) {
 			if (!Open(m_Comm[0], COMM_USB0, BAUDRATE_COMMON))
 				return false;
 		}
@@ -57,7 +57,7 @@ namespace Tools {
 	}
 
 	// Open Port
-	bool Uart::Open(int &uart, const char* modem, int baudrate) {
+	bool Uart::Open(int &uart, const char* modem, long baudrate) {
 		// Open handle
 		uart = open(modem, O_RDWR | O_NOCTTY | O_NDELAY);
 		if (uart == -1) {

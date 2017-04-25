@@ -89,12 +89,19 @@ namespace Tools {
 		m_WindowSizeIndex = (WINDOW_SIZE) size;
 	#endif
 
-		if (!InitCVCapture(0, m_WindowsSize[(WINDOW_SIZE) m_WindowSizeIndex]))
-			return false;
+		if (!InitCVCapture(0, m_WindowsSize[(WINDOW_SIZE) m_WindowSizeIndex])) return false;
 
+		// Ball
 		m_ObjectLocation.x = 0;
 		m_ObjectLocation.y = 0;
 
+		// Goal
+		m_2ndLocation.x = 0;
+		m_2ndLocation.y = 0;
+
+		// Other
+		m_3rdLocation.x = 0;
+		m_3rdLocation.y = 0;
 	#if CV_USE_FACE_DETECTION
 		m_Cascade = (CvHaarClassifierCascade*)cvLoad(filename, 0, 0, 0);
 		m_Storage = cvCreateMemStorage(0);
@@ -138,6 +145,16 @@ namespace Tools {
 	void Vision::GetObjectLocation(uint16_t &x, uint16_t &y) {
 		x = m_ObjectLocation.x;
 		y = m_ObjectLocation.y;
+	}
+
+	void Vision::Get2ndLocation(uint16_t &x, uint16_t &y) {
+		x = m_2ndLocation.x;
+		y = m_2ndLocation.y;
+	}
+
+	void Vision::Get3rdLocation(uint16_t &x, uint16_t &y) {
+		x = m_3rdLocation.x;
+		y = m_3rdLocation.y;
 	}
 
 	bool Vision::UpdateMode() {
@@ -339,10 +356,11 @@ namespace Tools {
 	#if USING_THIS_PRE_CONFIG
 		mode = SEND_DATA_MODE;
 	#else
-		unsigned char temp1;
-		int temp2, temp3;
-		Tools::ConfigParser::GetInstance()->GetSendImageUartParameter(temp1, temp2, temp3); // temp1 as mode
-		mode = (int) temp1;
+		// Obsolete
+		// unsigned char temp1;
+		// int temp2, temp3;
+		// Tools::ConfigParser::GetInstance()->GetSendImageUartParameter(temp1, temp2, temp3); // temp1 as mode
+		// mode = (int) temp1;
 	#endif
 
 		CvScalar temp;

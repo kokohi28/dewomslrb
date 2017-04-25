@@ -51,6 +51,12 @@
 #endif // Sensor CMPS10 (Compass)
 
 class Dewo {
+public:
+    enum TEAM_SIDE { // see also Dewo.h base project
+        SIDE_CYAN       = 65, // 'A'
+        SIDE_MAGENTA    = 66, // 'B'
+    };
+
 private:
 
 #if USE_WIFI_LISTENER
@@ -90,6 +96,7 @@ private:
 	int						m_PrevCommand;		// Prev Command
 
     int                     mRefState;
+	int                     m_Side;
 public:
 	Dewo();
 	~Dewo();
@@ -101,7 +108,9 @@ public:
 	void					MainLoop();
 
 	Tools::UdpHandler*      getHandler_Base() {return m_BaseHandler;}
-	
+
+	int                     getTeamSide() {return m_Side;}
+	void                    setTeamSide(int side) {m_Side = side;}
     int                     getState_RefState() {return mRefState;}
     void                    setState_RefState(int state) {mRefState = state;}
 private:

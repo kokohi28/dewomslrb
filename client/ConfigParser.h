@@ -38,10 +38,9 @@ namespace Tools {
 		// Command param's
 		unsigned char 			m_cfgMainControl;
 
-		// Data Image Uart param's
-		unsigned char 			m_cfgSendImageUartMode;
-		int 					m_cfgSendImageUartDelayMain;
-		int 					m_cfgSendImageUartDelaySend;
+		// Uart param's
+		std::string 			m_PrimaryUartUsed;
+		long 					m_PrimaryUartPort;
 		/******************************************/
 		// MSLRB parameter
 		std::string 			mBaseStation_IP;
@@ -68,8 +67,9 @@ namespace Tools {
 		// Command param's
 		void					GetCommandParameter(unsigned char &mainControl);
 
-		// Data Image Uart param's
-		void					GetSendImageUartParameter(unsigned char &mode, int &delayMain, int &delaySend);
+		// Uart param's
+		std::string				GetPrimaryUartUsed() {return m_PrimaryUartUsed;}
+		long					GetPrimaryUartPort() {return m_PrimaryUartPort;}
 		/******************************************/
 
 		std::string				GetBaseStation_IP() {return mBaseStation_IP;} // inline saja 

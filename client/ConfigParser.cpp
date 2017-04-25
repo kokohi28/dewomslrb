@@ -58,6 +58,7 @@ namespace Tools {
 			pFile = fopen(CONFIG_PATH, "r");
 		}
 
+		long l;
 		unsigned int x, y, z;
 		char s[20]; // 20 chars, i think enough
 
@@ -78,34 +79,25 @@ namespace Tools {
 
 		// Vision param's
 		fscanf(pFile, "__TRACK\n");
-
 		fscanf(pFile, "MODE: %d\n", &x);
 		m_cfgVisionMode = (unsigned char) x;
-
 		fscanf(pFile, "WINDOW_SIZE: %d\n", &x);
 		m_cfgWindowSize = (unsigned char) x;
-
 		fscanf(pFile, "THRES_RANGE_START: %d %d %d\n", &x, &y, &z);
 		m_cfgThresStartH = (unsigned char) x;
 		m_cfgThresStartS = (unsigned char) y;
 		m_cfgThresStartV = (unsigned char) z;
-
 		fscanf(pFile, "THRES_RANGE_END: %d %d %d\n", &x, &y, &z);
 		m_cfgThresEndH = (unsigned char) x;
 		m_cfgThresEndS = (unsigned char) y;
 		m_cfgThresEndV = (unsigned char) z;
 
 		// Data Image Uart param's
-		fscanf(pFile, "__DATAIMAGE_UART\n");
-
-		fscanf(pFile, "MODE: %d\n", &x);
-		m_cfgSendImageUartMode = (unsigned char) x;
-
-		fscanf(pFile, "DELAY_MAIN: %d\n", &x);
-		m_cfgSendImageUartDelayMain = (int) x;
-
-		fscanf(pFile, "DELAY_SEND: %d\n", &x);
-		m_cfgSendImageUartDelaySend = (int) x;
+		fscanf(pFile, "__UART\n");
+		fscanf(pFile, "PRIMARY: %s\n", s);
+		m_PrimaryUartUsed = s;
+		fscanf(pFile, "PRIMARY_PORT: %ld\n", &l);
+		m_PrimaryUartPort = (long) l;
 
 		fclose(pFile); // Close file
 
@@ -129,12 +121,6 @@ namespace Tools {
 
 	void ConfigParser::GetCommandParameter(unsigned char &mainControl) {
 		mainControl = m_cfgMainControl;
-	}
-
-	void ConfigParser::GetSendImageUartParameter(unsigned char &mode, int &delayMain, int &delaySend) {
-		mode = m_cfgSendImageUartMode;
-		delayMain =	m_cfgSendImageUartDelayMain;
-		delaySend =	m_cfgSendImageUartDelaySend;
 	}
 
 } //// namespace Tools ////

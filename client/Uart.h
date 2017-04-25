@@ -21,9 +21,6 @@ namespace Tools {
 	private:
 		int*				m_Comm;
 
-		bool				Open(int &uart, const char* modem, int baudrate);
-		void				Close(int &uart);
-
 	public:
 		void				Send(int data);
 		void				Send(int data, int uart);
@@ -36,6 +33,8 @@ namespace Tools {
 		bool 				OpenAvailableComm();
 		void				CloseAvailableComm();
 
+		bool				Open(int &uart, const char* modem, long baudrate);
+		void				Close(int &uart);
 	};
 
 } //// namespace Tools ////

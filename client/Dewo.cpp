@@ -131,14 +131,31 @@ void Dewo::Init() {
 #endif
 
 #if USE_BUS_UART
-	m_CommHandle 	= new Tools::Uart();
-	if (!m_CommHandle->OpenAvailableComm()) {
+	long baud 				= Tools::ConfigParser::GetInstance()->GetPrimaryUartPort(); 
+    std::string comm_port 	= Tools::ConfigParser::GetInstance()->GetPrimaryUartUsed();
+
+    // Execute helper first XD, thanks to Faris's code
+    std::string command("python helper_serial.py ");
+    command.append(comm_port.c_str());
+    system(command.c_str());
+
+	m_CommHandle 	= new Tools::Uart();	
+	// Obsolete
+	// if (!m_CommHandle->OpenAvailableComm()) {
+	// 	DBG_E("[Dewo] Uart not ready");
+	// } else {
+	// 	// m_CommHandle->Test();
+	// 	m_CommHandle->Send(13); // test with send enter
+
+	// 	// init first uart port
+	// 	m_ActiveComm = m_CommHandle->GetComm(MAIN); // Use this for primary uart comm
+	// }
+
+	// Open one by one
+	if (!m_CommHandle->Open(m_ActiveComm, comm_port.c_str(), baud)) {
 		DBG_E("[Dewo] Uart not ready");
 	} else {
-		m_CommHandle->Test();
-
-		// init first uart port
-		m_ActiveComm = m_CommHandle->GetComm(MAIN); // Use this for primary uart comm
+		m_CommHandle->Send(13, m_ActiveComm); // test with send enter
 	}
 #endif
 
@@ -210,7 +227,8 @@ bool Dewo::InitConfig() {
 // Primary DeInit
 void Dewo::DeInit() {
 #if USE_BUS_UART
-	m_CommHandle->CloseAvailableComm();
+	// m_CommHandle->CloseAvailableComm(); // Obsolete
+	m_CommHandle->Close(m_ActiveComm);
 #endif
 }
 
@@ -269,16 +287,15 @@ bool Dewo::PreProcess() {
 			uint16_t posx, posy;
 
 			m_Vision->GetObjectLocation(posx, posy);
-			printf("... To Robo:%d %d %d\n", posx, posy, mRefState);
+			printf("... To Robo:%d %d %d %d\n", posx, posy, mRefState, m_Side);
 
 			// Send
-			int uart = m_CommHandle->GetComm(MAIN);
-			m_CommHandle->SendDigit((long) posx, 3, uart, 1);
-			m_CommHandle->Send(65); // 'A'
-			m_CommHandle->SendDigit((long) posy, 3, uart, 1);
-			m_CommHandle->Send(68); // 'D'
-			m_CommHandle->Send(mRefState); // wifi
-			m_CommHandle->Send(13); // enter				
+			m_CommHandle->SendDigit((long) posx, 3, m_ActiveComm, 1);
+			m_CommHandle->Send(65, m_ActiveComm); // 'A'
+			m_CommHandle->SendDigit((long) posy, 3, m_ActiveComm, 1);
+			m_CommHandle->Send(68, m_ActiveComm); // 'D'
+			m_CommHandle->Send(mRefState, m_ActiveComm); // wifi
+			m_CommHandle->Send(13, m_ActiveComm); // enter				
 		}
 			break;
 		case Command::XC_GRAB_TO_LOCAL: {
@@ -338,10 +355,14 @@ void *_thread_udp_base_station(void *vargp) {
         std::string data = Dewo::GetInstance()->getHandler_Base()->ReadData();
         // TODO!!! Recheck data from client and process based command/instruction/request format
 
-        // printf("Ref Udp Base Data:%s\n", data.c_str());
+        // printf("Ref Udp Base Data:%s %d\n", data.c_str(), data.length());
 
         // Save state;
-        Dewo::GetInstance()->setState_RefState(data[0]);
+        int side = (int) data[0];
+        if (Dewo::GetInstance()->getTeamSide() != side) Dewo::GetInstance()->setTeamSide(side);
+ 
+        int command = (int) data[1];
+        Dewo::GetInstance()->setState_RefState(command);
     }
 
     DBG_I("[Dewo] _thread_tcp_refbox STOP!!!");
@@ -349,6 +370,7 @@ void *_thread_udp_base_station(void *vargp) {
 
 Dewo::Dewo():
   m_MainControl((unsigned int) Command::CONSOLE)
+, m_Side(Dewo::SIDE_CYAN)
 , m_ActiveComm(0)
 , m_Command(Command::XC_IDLE_CAMERA_STEADY)
 , m_PrevCommand(Command::XC_IDLE_CAMERA_STEADY) {

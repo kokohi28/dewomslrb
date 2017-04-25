@@ -60,6 +60,8 @@ namespace Tools {
 		} Point;
 		Point						m_WindowsSize[WINDOW_SIZE_COUNT - 1];
 		Point						m_ObjectLocation;
+		Point						m_2ndLocation;
+		Point						m_3rdLocation;
 
 		bool						InitCVCapture(uint8_t device, Point size);
 		void						InitWindowSize();
@@ -80,6 +82,8 @@ namespace Tools {
 		bool						Init();
 		bool						Update();
 		void						GetObjectLocation(uint16_t &x, uint16_t &y);
+		void						Get2ndLocation(uint16_t &x, uint16_t &y);
+		void						Get3rdLocation(uint16_t &x, uint16_t &y);
 		void 						SaveCapturedFrame(std::string fileName);
 		void						SendViaUart(int delay, Tools::Uart* comm);
 	};
