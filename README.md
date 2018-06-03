@@ -34,3 +34,14 @@ user@linux $ ./Dewo config_sip.cfg
 
 * to cleaning the build, just type this command:
 user@linux $ make clean
+
+
+## REQUIREMENTS
+### for client (Raspberry machine)
+* install opencv on raspberry, you can refer with this site:
+https://robertcastle.com/2014/02/installing-opencv-on-a-raspberry-pi/
+
+Or you can Googling and find one that works based on your own case.
+* install python(if not installed yet, minimum python 2.0)
+
+* install and plug USB-Camera and USB-TTL
