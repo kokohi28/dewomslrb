@@ -45,3 +45,6 @@ Or you can Googling and find one that works based on your own case.
 * install python(if not installed yet, minimum python 2.0)
 
 * install and plug USB-Camera and USB-TTL
+
+## TROUBLESHOOT
+if you have any problem, you can unplug and plug again the usb camera on usb port of raspberry pi.
