@@ -47,4 +47,6 @@ Or you can Googling and find one that works based on your own case.
 * install and plug USB-Camera and USB-TTL
 
 ## TROUBLESHOOT
-if you have any problem, you can unplug and plug again the usb camera on usb port of raspberry pi.
+if you have any problem, you can check this :
+1. Check connection between usb to ttl and your arduino
+2. Make sure your camera's cable plugged correctly. if you have an error, unplug and plug again the usb camera on usb port of raspberry pi, and you can rerun your program.
