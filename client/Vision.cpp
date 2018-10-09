@@ -259,8 +259,7 @@ namespace Tools {
 					m_ObjectLocation.y = 0;
 				}
 
-				// cvShowImage(WINDOW_NAME, imgThres);
-
+				cvShowImage(WINDOW_NAME, imgThres);
 				cvReleaseImage(&imgThres);
 				delete moments;
 			}
